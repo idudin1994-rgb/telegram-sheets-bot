@@ -16,7 +16,13 @@ SCOPES = [
     "https://www.googleapis.com/auth/drive"
 ]
 
-creds = Credentials.from_service_account_file("credentials.json", scopes=SCOPES)
+import json, os
+from google.oauth2.service_account import Credentials
+
+creds = Credentials.from_service_account_info(
+    json.loads(os.getenv("GOOGLE_CREDS_JSON")),
+    scopes=SCOPES
+)
 gc = gspread.authorize(creds)
 ws = gc.open_by_key(SPREADSHEET_ID).sheet1
 
@@ -293,3 +299,4 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
+
